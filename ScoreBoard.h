@@ -33,6 +33,7 @@ class ScoreBoard
   public:
     ScoreBoard() //constructs the s1 scoreboard object and sets the scoreboard to its proper initial values including the team data chosen by the user
     {
+      possesion = true;
       quarter = 1;
       down = 1;
       toGo = 10;
@@ -45,27 +46,32 @@ class ScoreBoard
       switch(choice[0])
       {
         case 1: 
-          home.setName("Dallas Cowboys      ");
+          home.setColor("\x1B[44m");
+          home.setName("\x1B[34mDallas Cowboys      \033[0m");
           home.setCoachName("Mike McCarthy");
           home.setHomeCity("Dallas");
           break;
         case 2: 
-          home.setName("New England Patriots");
+          home.setColor("\x1B[41m");
+          home.setName("\x1B[31mNew England Patriots\033[0m");
           home.setCoachName("Bill Belichick");
           home.setHomeCity("New England");
           break;
         case 3: 
-          home.setName("Green Bay Packers   ");
+          home.setColor("\x1B[42m");
+          home.setName("\x1B[32mGreen Bay Packers   \033[0m");
           home.setCoachName("Matt Lafleur");
           home.setHomeCity("Green Bay");
           break;
         case 4: 
-          home.setName("San Fransisco 49ers ");
+          home.setColor("\x1B[43m");
+          home.setName("\x1B[33mSan Fransisco 49ers \033[0m");
           home.setCoachName("Kyle Shanahan");
           home.setHomeCity("San Fransisco");
           break;
         case 5: 
-          home.setName("Seatle Seahawks     ");
+          home.setColor("\033[0m");
+          home.setName("\033[0mSeatle Seahawks     ");
           home.setCoachName("Pete Carroll");
           home.setHomeCity("Seatle");
           break;
@@ -79,27 +85,32 @@ class ScoreBoard
       switch(choice[1])
       {
         case 1: 
-          away.setName("Dallas Cowboys      ");
+          away.setColor("\x1B[44m");
+          away.setName("\x1B[34mDallas Cowboys      \033[0m");
           away.setCoachName("Mike McCarthy");
           away.setHomeCity("Dallas");
           break;
         case 2: 
-          away.setName("New England Patriots");
+          away.setColor("\x1B[41m");
+          away.setName("\x1B[31mNew England Patriots\033[0m");
           away.setCoachName("Bill Belichick");
           away.setHomeCity("New England");
           break;
         case 3: 
-          away.setName("Green Bay Packers   ");
+          away.setColor("\x1B[42m");
+          away.setName("\x1B[32mGreen Bay Packers   \033[0m");
           away.setCoachName("Matt Lafleur");
           away.setHomeCity("Green Bay");
           break;
         case 4: 
-          away.setName("San Fransisco 49ers ");
+          away.setColor("\x1B[43m");
+          away.setName("\x1B[33mSan Fransisco 49ers \033[0m");
           away.setCoachName("Kyle Shanahan");
           away.setHomeCity("San Fransisco");
           break;
         case 5: 
-          away.setName("Seatle Seahawks     ");
+          away.setColor("\033[0m");
+          away.setName("\033[0mSeatle Seahawks     ");
           away.setCoachName("Pete Carroll");
           away.setHomeCity("Seatle");
           break;
@@ -108,6 +119,17 @@ class ScoreBoard
       }
     }
 
+    string getPossesionColor() const
+    {
+      if(possesion)
+      {
+        return home.getColor();
+      }
+      else
+      {
+        return away.getColor();
+      }
+    }
     int getQuarter() const { return quarter; }
     int getDown() const { return down; }
     int getToGo() const { return toGo; }
@@ -131,20 +153,36 @@ class ScoreBoard
     void setQuarter(int a) { quarter = a; }
     void nextDown() { down++; }
     void setDown(int a) { down = a; }
-    void setYardGain(int a)
+    void setYardGain(int a) { toGo = toGo - a; }
+    void setYardLoss(int a) { toGo = toGo - a; }
+    void setToGo(int a) { toGo = a; }
+    void changePossesion() { possesion = !possesion;}
+    void touchDown()
     {
-      if(a > toGo)
+      if(possesion)
       {
-        toGo = 10;
-        nextDown();
+        home.touchDownPlusKick();
+        possesion = !possesion;
       }
       else
       {
-        toGo -= a;
+        away.touchDownPlusKick();
+        possesion = !possesion;
       }
     }
-    void setToGo(int a) { toGo = a; }
-    void changePossesion() { possesion = !possesion;}
+    void fieldGoal()
+    {
+      if(possesion)
+      {
+        home.fieldGoal();
+        possesion = !possesion;
+      }
+      else
+      {
+        away.fieldGoal();
+        possesion = !possesion;
+      }
+    }
     
     void setHomeName(string a) { home.setName(a); }
     void setHomeCoachName(string a) { home.setCoachName(a); }
@@ -158,7 +196,5 @@ class ScoreBoard
     void setAwayHomeCity(string a) { away.setHomeCity(a); }
     void setAwayStatus(bool a) { away.setHomeStatus(a); }
     void setAwayScore(int a) { away.setScore(a); }
-    void setAwayTimeOutCount(int a) { away.setTimeOutCount(a); }
-
-    
+    void setAwayTimeOutCount(int a) { away.setTimeOutCount(a); }   
 };

@@ -6,6 +6,7 @@ using namespace std;
 class Team
 {
   private:
+    string color;
     string name;
     string coachName;
     string homeCity;
@@ -19,10 +20,12 @@ class Team
       name = "No Name"; //default constructor values changed during the construction of the ScoreBoard object s1
       coachName = "No Name";
       homeCity = "No Name";
+      color = "No Color";
       homeStatus = true;
       score = 0;
       timeOutCount = 30;
     }
+    void setColor(string newColor) { color = newColor; }
     void setName(string newName) { name = newName; }
     void setCoachName(string newCoachName) { coachName = newCoachName; }
     void setHomeCity(string newHomeCity) { homeCity = newHomeCity; }
@@ -30,7 +33,8 @@ class Team
     void setScore(int newScore) { score = newScore; }
     void setTimeOutCount(int newTimeOutCount) { timeOutCount = newTimeOutCount; }
     void touchDownPlusKick()  { score += 7; }
-    void feildGoal()  { score += 3; }
+    void fieldGoal()  { score += 3; }
+    string getColor() const { return color; }
     string getName() const { return name; }
     string getCoachName() const { return coachName; }
     string getHomeCity() const { return homeCity; }
